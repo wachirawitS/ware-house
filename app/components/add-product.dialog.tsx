@@ -51,13 +51,13 @@ const AddProductDialog = ({ addProductEvent }: Props) => {
         mode: "cors",
         body: JSON.stringify(values),
       });
+      addProductEvent();
       toast({
         title: "ทำรายการสำเร็จ",
         description: "เพิ่มสินค้าสำเร็จ",
       });
       form.reset();
       setIsLoading(false);
-      addProductEvent();
     } catch (error) {
       setIsLoading(false);
       toast({

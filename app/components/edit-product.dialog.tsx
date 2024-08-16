@@ -55,13 +55,13 @@ const EditProductDialog = ({ editProductEvent, product }: Props) => {
         mode: "cors",
         body: JSON.stringify(values),
       });
+      editProductEvent();
       toast({
         title: "ทำรายการสำเร็จ",
         description: "แก้ไขสินค้าสำเร็จ",
       });
       form.reset();
       setIsLoading(false);
-      editProductEvent();
     } catch (error) {
       setIsLoading(false);
       toast({
