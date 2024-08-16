@@ -102,7 +102,7 @@ export default function Home() {
             </div>
           </TabsContent>
           <TabsContent value="warehouse">
-            <div className="p-4 border rounded-lg">GG กำลังทำอยู่</div>
+            <div className="p-4 border rounded-lg">ไม่มีอะไรให้เล่นหร๊อก</div>
           </TabsContent>
         </Tabs>
       </div>
