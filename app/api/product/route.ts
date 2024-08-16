@@ -1,18 +1,18 @@
 import connectMongo from "@/app/libs/database";
 import Product from "@/app/models/product.model";
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: Request) {
   await connectMongo();
   const products = await Product.find();
-  return Response.json({ result: products });
+  return NextResponse.json({ result: products });
 }
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
   await connectMongo();
   await await Product.create(body);
-  return Response.json({ isSuccess: true });
+  return NextResponse.json({ isSuccess: true });
 }
 
 export async function DELETE(req: NextRequest) {
@@ -20,12 +20,12 @@ export async function DELETE(req: NextRequest) {
   const searchParams = req.nextUrl.searchParams;
   const id = searchParams.get("id");
   await await Product.findByIdAndDelete(id);
-  return Response.json({ isSuccess: true });
+  return NextResponse.json({ isSuccess: true });
 }
 
 export async function PUT(req: NextRequest) {
   await connectMongo();
   const { id, ...otherFields } = await req.json();
   await await Product.findByIdAndUpdate(id, otherFields);
-  return Response.json({ isSuccess: true });
+  return NextResponse.json({ isSuccess: true });
 }
