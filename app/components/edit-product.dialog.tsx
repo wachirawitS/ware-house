@@ -72,7 +72,6 @@ const EditProductDialog = ({ editProductEvent, product }: Props) => {
     }
   };
   const initialForm = () => {
-    console.log()
     form.setValue("id", product.id);
     form.setValue("productName", product.productName);
     form.setValue("productNo", product.productNo);
