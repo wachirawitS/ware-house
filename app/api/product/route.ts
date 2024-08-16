@@ -16,6 +16,7 @@ export async function POST(req: NextRequest) {
 }
 
 export async function DELETE(req: NextRequest) {
+  await connectMongo();
   const searchParams = req.nextUrl.searchParams;
   const id = searchParams.get("id");
   await await Product.findByIdAndDelete(id);
@@ -25,8 +26,6 @@ export async function DELETE(req: NextRequest) {
 export async function PUT(req: NextRequest) {
   await connectMongo();
   const { id, ...otherFields } = await req.json();
-  console.log('id', id);
-  console.log('other f', otherFields);
   await await Product.findByIdAndUpdate(id, otherFields);
   return Response.json({ isSuccess: true });
 }
