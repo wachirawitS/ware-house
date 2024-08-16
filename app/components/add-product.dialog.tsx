@@ -43,7 +43,12 @@ const AddProductDialog = () => {
   const onSubmit = async (values: TAddProduct) => {
     try {
       setIsLoading(true);
-      await axios.post(`${appConfig.BASE_URL}/api/product`, values);
+      await fetch(`${appConfig.BASE_URL}/api/product`, {
+        method: 'POST',
+        mode: 'cors',
+        body: JSON.stringify(values)
+      })
+      /* await axios.post(`${appConfig.BASE_URL}/api/product`, values); */
       toast({
         title: "ทำรายการสำเร็จ",
         description: "เพิ่มสินค้าสำเร็จ",
