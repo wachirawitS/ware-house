@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -12,7 +12,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { CirclePlus } from "lucide-react";
+import { CirclePlus, Pencil } from "lucide-react";
 import {
   Form,
   FormControl,
@@ -26,38 +26,42 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useToast } from "@/components/ui/use-toast";
 import { appConfig } from "../configs/app.config";
+import { IProduct } from "../models/product.model";
+import { TEditProduct, editProductSchema } from "../schema/edit-product.schema";
 
 type Props = {
-  addProductEvent(): void;
+  product: IProduct,
+  editProductEvent(): void;
 };
 
-const AddProductDialog = ({ addProductEvent }: Props) => {
+const EditProductDialog = ({ editProductEvent, product }: Props) => {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
-  const form = useForm<TAddProduct>({
-    resolver: zodResolver(addProductSchema),
+  const form = useForm<TEditProduct>({
+    resolver: zodResolver(editProductSchema),
     defaultValues: {
       productName: "",
       productNo: "",
       qty: 0,
       description: "",
+      id: ''
     },
   });
-  const onSubmit = async (values: TAddProduct) => {
+  const onSubmit = async (values: TEditProduct) => {
     try {
       setIsLoading(true);
       await fetch(`${appConfig.BASE_URL}/api/product`, {
-        method: "POST",
+        method: "PUT",
         mode: "cors",
         body: JSON.stringify(values),
       });
       toast({
         title: "ทำรายการสำเร็จ",
-        description: "เพิ่มสินค้าสำเร็จ",
+        description: "แก้ไขสินค้าสำเร็จ",
       });
       form.reset();
       setIsLoading(false);
-      addProductEvent();
+      editProductEvent();
     } catch (error) {
       setIsLoading(false);
       toast({
@@ -67,14 +71,23 @@ const AddProductDialog = ({ addProductEvent }: Props) => {
       });
     }
   };
+  const initialForm = () => {
+    console.log()
+    form.setValue("id", product.id);
+    form.setValue("productName", product.productName);
+    form.setValue("productNo", product.productNo);
+    form.setValue("qty", product.qty);
+    form.setValue("description", product.description);
+  }
+  useEffect(() => {
+    initialForm();
+  }, [product])
+  
   return (
     <Form {...form}>
       <Dialog>
         <DialogTrigger asChild>
-          <Button className="flex space-x-2">
-            <CirclePlus className="w-4 h-4" />
-            <p>เพิ่มสินค้า</p>
-          </Button>
+          <Pencil className="w-4 h-4 cursor-pointer text-blue-600" />
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -161,4 +174,4 @@ const AddProductDialog = ({ addProductEvent }: Props) => {
   );
 };
 
-export default AddProductDialog;
+export default EditProductDialog;
